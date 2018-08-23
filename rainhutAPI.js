@@ -1,17 +1,17 @@
 var CryptoJS = require("crypto-js");
-
-class RainhutAPI {
+var fetch = require('node-fetch')
+class rainhutapi {
 
     constructor(privateKey, publicKey) {
       this.privateKey = privateKey;
       this.publicKey = publicKey;
     }
 
-    getTimestamp = () => {
+    getTimestamp() {
         return Math.floor(new Date() / 1000);
     }
     
-    getAuthenticationString = (ts, bookId ) => {
+    getAuthenticationString(ts, bookId ) {
         var strToHash = "ts" + ts + this.publicKey + bookId;
         var authString = CryptoJS.HmacSHA256(
           strToHash,
@@ -20,31 +20,35 @@ class RainhutAPI {
         return authString;
     }
 
-    createBook = (entries, setup) => {
+     createBook(entries, setup, callback) {
         var ts = this.getTimestamp()
-        var authString = getAuthenticationString(ts, "")
+        console.log(ts)
+        console.log(this.privateKey)
+        console.log(this.publicKey)
+        
+        
+        var authString = this.getAuthenticationString(ts, "")
+        console.log(authString)
         var body = {entries: entries, setup: setup, auth: authString, pk: this.publicKey, ts: ts}
-
-        try {
-            let res = await fetch("https://artapi2.rainhut.com/books/create2", {
+            fetch("https://artapi2.rainhut.com/books/create2", {
                  method: "POST",
                  headers: {
                     "Content-Type": "application/json"
                   },
                 body: JSON.stringify(body)
             })
-            return res.json()
-        }
-        catch(e) {
-            return {"status": "error", "message": e.message}
-        }
+            .then(res => res.json())
+            .then(callback)
+            .catch(function(e){
+                callback({"status": "error", "message": e.message})
+            });
     }
 
-    updateBook = (book) => {
+    updateBook(book, callback) {
         var ts = this.getTimestamp()
-        var authString = getAuthenticationString(ts, book.bookId)
+        var authString = this.getAuthenticationString(ts, book.bookId)
         var body = {entries: entries, setup: setup, auth: authString, pk: this.publicKey, ts: ts}
-
+        async function doCall() {
         try {
             let res = await fetch("https://artapi2.rainhut.com/books/update2", {
                  method: "POST",
@@ -53,18 +57,20 @@ class RainhutAPI {
                   },
                 body: JSON.stringify(body)
             })
-            return res.json()
+            callback(res.json())
         }
         catch(e) {
-            return {"status": "error", "message": e.message}
+            callback({"status": "error", "message": e.message})
         }
+        }
+        doCall()
     }
 
-    uploadBook = (book) => {
+    uploadBook(book, callback) {
         var ts = this.getTimestamp()
-        var authString = getAuthenticationString(ts, book.bookId)
+        var authString = this.getAuthenticationString(ts, book.bookId)
         var body = {entries: entries, setup: setup, auth: authString, pk: this.publicKey, ts: ts}
-
+        async function doCall() {
         try {
             let res = await fetch("https://artapi2.rainhut.com/books/upload2", {
                  method: "POST",
@@ -73,11 +79,14 @@ class RainhutAPI {
                   },
                 body: JSON.stringify(body)
             })
-            return res.json()
+            callback(res.json())
         }
         catch(e) {
-            return {"status": "error", "message": e.message}
+            callback({"status": "error", "message": e.message})
         }
+    }
+    doCall()
     }
 
 }
+module.exports = rainhutapi
