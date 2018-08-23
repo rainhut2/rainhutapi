@@ -7,6 +7,5 @@
 *.gz
 .DS_Store
 *.swp
-package*
 npm-debug.log
 node_modules

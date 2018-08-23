@@ -1,0 +1,22 @@
+{
+  "name": "rainhutapi",
+  "version": "1.0.0",
+  "description": "Rainhut API ",
+  "main": "rainhutAPI.js",
+  "scripts": {
+    "test": "createBook"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rainhut2/rainhutapi.git"
+  },
+  "author": "lani tripoli",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rainhut2/rainhutapi/issues"
+  },
+  "homepage": "https://github.com/rainhut2/rainhutapi#readme",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
+  }
+}
