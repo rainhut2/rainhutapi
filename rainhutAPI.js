@@ -1,4 +1,4 @@
-import CryptoJS from "crypto-js";
+var CryptoJS = require "crypto-js";
 
 class RainhutAPI {
 
