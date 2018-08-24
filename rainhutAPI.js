@@ -1,10 +1,10 @@
 var CryptoJS = require("crypto-js");
 var fetch = require('node-fetch')
 class rainhutapi {
-
     constructor(privateKey, publicKey) {
       this.privateKey = privateKey;
       this.publicKey = publicKey;
+      
     }
 
     getTimestamp() {
