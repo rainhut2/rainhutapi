@@ -22,13 +22,8 @@ class rainhutapi {
 
      createBook(entries, setup, callback) {
         var ts = this.getTimestamp()
-        console.log(ts)
-        console.log(this.privateKey)
-        console.log(this.publicKey)
-        
-        
         var authString = this.getAuthenticationString(ts, "")
-        console.log(authString)
+        
         var body = {entries: entries, setup: setup, auth: authString, pk: this.publicKey, ts: ts}
             fetch("https://artapi2.rainhut.com/books/create2", {
                  method: "POST",
