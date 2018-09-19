@@ -65,16 +65,14 @@ class rainhutapi {
   uploadBook(book, callback) {
     var ts = this.getTimestamp();
     var authString = this.getAuthenticationString(ts, book.bookId);
-    book.auth = authString
-    book.pk = this.publicKey
-    book.ts = ts
+    var body = { bookId: book.bookId, pages: book.pages, setup: book.setup, auth: authString, pk: this.publicKey, ts: ts }
 
     let res = fetch("https://artapi2.rainhut.com/books/upload2", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(book)
+      body: JSON.stringify(body)
     })
       .then(res => res.json())
       .then(callback)
