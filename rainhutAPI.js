@@ -1,6 +1,8 @@
 var CryptoJS = require("crypto-js");
 var fetch = require("node-fetch");
 
+const baseUrl = 'https://artapi2.rainhut.com/'
+
 class rainhutapi {
   constructor(privateKey, publicKey) {
     this.privateKey = privateKey;
@@ -17,7 +19,7 @@ class rainhutapi {
     return authString;
   }
 
-  createBook(entries, setup, callback) {
+  createBook(entries, setup, callback, overrideUrl) {
     var ts = this.getTimestamp();
     var authString = this.getAuthenticationString(ts, "");
     var body = {
@@ -27,7 +29,12 @@ class rainhutapi {
       pk: this.publicKey,
       ts: ts
     };
-    fetch("https://artapi2.rainhut.com/books/create2", {
+    var bUrl = baseUrl
+    if(overrideUrl != undefined) {
+      bUrl = overrideUrl
+    }
+    
+    fetch(bUrl + "books/create2", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -41,14 +48,17 @@ class rainhutapi {
       });
   }
 
-  updateBook(book, callback) {
+  updateBook(book, callback, overrideUrl) {
     var ts = this.getTimestamp();
     var authString = this.getAuthenticationString(ts, book.bookId);
     book.auth = authString
     book.pk = this.publicKey
     book.ts = ts
-
-    let res = fetch("https://artapi2.rainhut.com/books/update2", {
+    var bUrl = baseUrl
+    if(overrideUrl != undefined) {
+      bUrl = overrideUrl
+    }
+    let res = fetch(bUrl + "books/update2", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -62,12 +72,15 @@ class rainhutapi {
       });
   }
 
-  uploadBook(book, callback) {
+  uploadBook(book, callback, overrideUrl) {
     var ts = this.getTimestamp();
     var authString = this.getAuthenticationString(ts, book.bookId);
     var body = { bookId: book.bookId, pages: book.pages, setup: book.setup, auth: authString, pk: this.publicKey, ts: ts }
-
-    let res = fetch("https://artapi2.rainhut.com/books/upload2", {
+    var bUrl = baseUrl
+    if(overrideUrl != undefined) {
+      bUrl = overrideUrl
+    }
+    let res = fetch(overrideUrl + "books/upload2", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
